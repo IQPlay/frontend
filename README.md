@@ -4,6 +4,11 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 First, run the development server:
 
+install pnpm : npm install -g pnpm
+install node_modules for running : pnpm i
+run dev : pnpm dev
+=> go to browser and localhost:3000/
+
 ```bash
 npm run dev
 # or

@@ -1,14 +1,12 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend of IQPlay
+You can visite the backend repositorie [here](https://github.com/IQPlay/backend)
 
 ## Getting Started
+install pnpm : `npm install -g pnpm` (you can also use npm)<br/>
+install node_modules for running : `pnpm i`<br/>
+run dev : `pnpm dev`<br/>
 
-First, run the development server:
-
-install pnpm : npm install -g pnpm
-install node_modules for running : pnpm i
-run dev : pnpm dev
-=> go to browser and localhost:3000/
-
+run the development server:
 ```bash
 npm run dev
 # or
@@ -20,10 +18,6 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More
 

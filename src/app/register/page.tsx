@@ -12,14 +12,38 @@ export default function Register() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(""); // Réinitialiser les erreurs
+        setSuccess(false); // Réinitialiser le succès
+
+        // Validation côté client
+        if (!username || !email || !password) {
+            setError("Tous les champs sont obligatoires.");
+            return;
+        }
+        if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+            setError("Veuillez entrer une adresse e-mail valide.");
+            return;
+        }
+        if (password.length < 6) {
+            setError("Le mot de passe doit contenir au moins 6 caractères.");
+            return;
+        }
+
         try {
+            setIsSubmitting(true); // Indique que la requête est en cours
             await apiRequest("/auth/register", "POST", { username, email, password });
-            setSuccess(true);
+            setSuccess(true); // Marquer le succès
+            setUsername("");
+            setEmail("");
+            setPassword("");
         } catch (err: any) {
-            setError(err.message || "Erreur lors de l'inscription.");
+            setError(err.message || "Une erreur est survenue lors de l'inscription.");
+        } finally {
+            setIsSubmitting(false); // Réinitialiser l'état de soumission
         }
     };
 
@@ -45,6 +69,7 @@ export default function Register() {
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 required
+                                disabled={isSubmitting}
                             />
                         </div>
                         <div className="space-y-2">
@@ -56,6 +81,7 @@ export default function Register() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
+                                disabled={isSubmitting}
                             />
                         </div>
                         <div className="space-y-2">
@@ -67,10 +93,15 @@ export default function Register() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
+                                disabled={isSubmitting}
                             />
                         </div>
-                        <Button type="submit" className="w-full bg-blue-600 text-white hover:bg-blue-700">
-                            S'inscrire
+                        <Button
+                            type="submit"
+                            className="w-full bg-blue-600 text-white hover:bg-blue-700"
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting ? "Inscription..." : "S'inscrire"}
                         </Button>
                     </form>
                     <p className="text-sm text-gray-600 text-center mt-4">

@@ -1,7 +1,7 @@
-import Link from 'next/link'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Brain, LogIn, UserPlus } from 'lucide-react'
+import Link from 'next/link';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Brain, LogIn, UserPlus } from 'lucide-react';
 
 export default function Home() {
     return (
@@ -16,12 +16,11 @@ export default function Home() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                    {/* Nouveau message informatif */}
                     <p className="text-center text-gray-500 text-sm">
                         <strong>Astuce :</strong> Connectez-vous ou inscrivez-vous pour sauvegarder votre progression dans les niveaux.
                     </p>
                     <Button asChild className="w-full text-lg py-6 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 shadow-lg hover:shadow-xl">
-                        <Link href="/play" className="flex items-center justify-center">
+                        <Link href="/game/start-game" className="flex items-center justify-center">
                             <Brain className="mr-2" />
                             Jouer sans compte
                         </Link>
@@ -43,5 +42,5 @@ export default function Home() {
                 </CardContent>
             </Card>
         </div>
-    )
+    );
 }

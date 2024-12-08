@@ -1,32 +1,38 @@
-export const API_URL = "localhost:8080";
+export const API_URL = "http://localhost:8080/api";
 
 /**
  * Fonction générique pour envoyer des requêtes à l'API.
  */
-export async function apiRequest(
-    endpoint: string,
-    method: string = "GET",
-    body?: object,
-    headers: HeadersInit = {}
-) {
-    const options: RequestInit = {
+export async function apiRequest(endpoint: string, method: string, body?: any) {
+    console.log(`Requête envoyée à : ${API_URL}${endpoint}`);
+    console.log(`Méthode : ${method}`);
+    console.log(`Body :`, body);
+
+    const response = await fetch(`${API_URL}${endpoint}`, {
         method,
         headers: {
             "Content-Type": "application/json",
-            ...headers,
         },
-    };
+        body: body ? JSON.stringify(body) : undefined,
+    });
 
-    if (body) {
-        options.body = JSON.stringify(body);
-    }
+    console.log(`Statut de la réponse : ${response.status}`);
 
-    const response = await fetch(`${API_URL}${endpoint}`, options);
-
+    // Vérifie si la réponse est au format JSON
+    const contentType = response.headers.get("Content-Type");
     if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Une erreur est survenue.");
+        const errorMessage = contentType && contentType.includes("application/json")
+            ? (await response.json()).error || "Erreur inattendue."
+            : await response.text();
+        throw new Error(errorMessage);
     }
 
-    return response.json();
+    // Retourne la réponse JSON si elle est valide
+    return contentType && contentType.includes("application/json")
+        ? await response.json()
+        : null;
 }
+
+
+
+

@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { apiRequest } from "@/lib/api";
+import { isAuthenticated } from "@/lib/auth";
 
 export default function Register() {
     const [username, setUsername] = useState("");
@@ -14,10 +16,18 @@ export default function Register() {
     const [success, setSuccess] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const router = useRouter();
+
+    useEffect(() => {
+        if (isAuthenticated()) {
+            router.replace("/dashboard");
+        }
+    }, []);
+
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError(""); // Réinitialiser les erreurs
-        setSuccess(false); // Réinitialiser le succès
+        setError("");
+        setSuccess(false);
 
         // Validation côté client
         if (!username || !email || !password) {
@@ -34,18 +44,23 @@ export default function Register() {
         }
 
         try {
-            setIsSubmitting(true); // Indique que la requête est en cours
+            setIsSubmitting(true);
             await apiRequest("/auth/register", "POST", { username, email, password });
-            setSuccess(true); // Marquer le succès
+            setSuccess(true);
             setUsername("");
             setEmail("");
             setPassword("");
         } catch (err: any) {
             setError(err.message || "Une erreur est survenue lors de l'inscription.");
         } finally {
-            setIsSubmitting(false); // Réinitialiser l'état de soumission
+            setIsSubmitting(false);
         }
     };
+
+    // Retourne un écran vide si l'utilisateur est déjà connecté
+    if (isAuthenticated()) {
+        return null;
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-100 flex items-center justify-center p-4">

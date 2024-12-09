@@ -1,7 +1,9 @@
+import { getCookie } from "@/lib/api";
+
+/**
+ * Vérifie si l'utilisateur est authentifié en vérifiant la présence d'un token dans les cookies.
+ */
 export const isAuthenticated = () => {
-    if (typeof window === "undefined") {
-        return false; // localStorage n'est pas disponible côté serveur
-    }
-    const token = localStorage.getItem("token");
-    return !!token; // Retourne true si un token est présent
+    if (typeof window === "undefined") return false;
+    return !!getCookie("token");
 };

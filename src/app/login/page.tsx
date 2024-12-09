@@ -12,35 +12,28 @@ export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [isCheckingAuth, setIsCheckingAuth] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
         if (isAuthenticated()) {
             router.replace("/dashboard");
+        } else {
+            setIsCheckingAuth(false); // L'authentification a été vérifiée
         }
-    }, []);
+    }, [router]);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        const payload = {
-            email,
-            password,
-        };
+        setError("");
 
         try {
-            const data = await apiRequest("/auth/login", "POST", payload);
-            localStorage.setItem("token", data.token);
+            await apiRequest("/auth/login", "POST", { email, password });
             router.push("/dashboard");
         } catch (err: any) {
             setError(err.message || "Erreur de connexion.");
         }
     };
-
-    // Retourne un écran vide si l'utilisateur est déjà connecté
-    if (isAuthenticated()) {
-        return null;
-    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-100 flex items-center justify-center p-4">
@@ -75,11 +68,6 @@ export default function Login() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                             />
-                        </div>
-                        <div className="flex justify-end">
-                            <Link href="/reset-password" className="text-sm text-blue-600 hover:underline">
-                                Mot de passe oublié ?
-                            </Link>
                         </div>
                         <Button type="submit" className="w-full bg-blue-600 text-white hover:bg-blue-700">
                             Se connecter

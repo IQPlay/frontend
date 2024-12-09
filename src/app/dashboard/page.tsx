@@ -1,28 +1,23 @@
-"use client";
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { isAuthenticated } from "@/lib/auth";
-import Link from "next/link";
+export default async function Dashboard() {
+    const cookieStore = await cookies(); // cookies() retourne une promesse
+    const token = cookieStore.get("token");
 
-export default function Dashboard() {
-    const router = useRouter();
-
-    useEffect(() => {
-        if (!isAuthenticated()) {
-            router.push("/login");
-        }
-    }, []);
+    if (!token) {
+        redirect("/login");
+    }
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center">
+        <div>
             <h1>Bienvenue sur votre tableau de bord !</h1>
-            <Link
+            <a
                 href="/logout"
                 className="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
             >
                 Déconnexion
-            </Link>
+            </a>
         </div>
     );
 }

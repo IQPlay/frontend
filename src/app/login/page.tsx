@@ -1,24 +1,18 @@
+// src/app/login/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { apiRequest } from "@/lib/api";
-import { isAuthenticated } from "@/lib/auth";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const router = useRouter();
-
-    useEffect(() => {
-        if (isAuthenticated()) {
-            router.replace("/dashboard");
-        }
-    }, []);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -30,17 +24,11 @@ export default function Login() {
 
         try {
             const data = await apiRequest("/auth/login", "POST", payload);
-            localStorage.setItem("token", data.token);
             router.push("/dashboard");
         } catch (err: any) {
             setError(err.message || "Erreur de connexion.");
         }
     };
-
-    // Retourne un écran vide si l'utilisateur est déjà connecté
-    if (isAuthenticated()) {
-        return null;
-    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-100 flex items-center justify-center p-4">

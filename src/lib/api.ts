@@ -1,4 +1,5 @@
-export const API_URL = "http://localhost:8080/api";
+// src/lib/api.ts
+export const API_URL = "https://localhost:8443/api";
 
 /**
  * Fonction générique pour envoyer des requêtes à l'API.
@@ -14,6 +15,7 @@ export async function apiRequest(endpoint: string, method: string, body?: any) {
             "Content-Type": "application/json",
         },
         body: body ? JSON.stringify(body) : undefined,
+        credentials: 'include', // Inclure les credentials (cookies)
     });
 
     console.log(`Statut de la réponse : ${response.status}`);
@@ -32,7 +34,3 @@ export async function apiRequest(endpoint: string, method: string, body?: any) {
         ? await response.json()
         : null;
 }
-
-
-
-

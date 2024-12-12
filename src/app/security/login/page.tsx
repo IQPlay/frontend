@@ -65,7 +65,7 @@ export default function Login() {
                             />
                         </div>
                         <div className="flex justify-end">
-                            <Link href="/reset-password" className="text-sm text-blue-600 hover:underline">
+                            <Link href="/security/reset-password" className="text-sm text-blue-600 hover:underline">
                                 Mot de passe oublié ?
                             </Link>
                         </div>
@@ -75,7 +75,7 @@ export default function Login() {
                     </form>
                     <p className="text-sm text-gray-600 text-center mt-4">
                         Pas de compte ?{" "}
-                        <Link href="/register" className="text-blue-600 hover:underline">
+                        <Link href="/security/register" className="text-blue-600 hover:underline">
                             Inscrivez-vous
                         </Link>
                     </p>

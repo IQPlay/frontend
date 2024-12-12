@@ -51,7 +51,7 @@ export default function ResetPassword() {
                     </form>
                     <p className="text-sm text-gray-600 text-center mt-4">
                         Rappelez-vous votre mot de passe ?{" "}
-                        <Link href="/login" className="text-blue-600 hover:underline">
+                        <Link href="/security/login" className="text-blue-600 hover:underline">
                             Connectez-vous
                         </Link>
                     </p>

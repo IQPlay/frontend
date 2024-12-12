@@ -27,13 +27,13 @@ export default function Home() {
                     </Button>
                     <div className="grid grid-cols-2 gap-4">
                         <Button asChild variant="outline" className="text-lg py-6 hover:bg-gray-100 transition-all duration-300">
-                            <Link href="/login" className="flex items-center justify-center">
+                            <Link href="/security/login" className="flex items-center justify-center">
                                 <LogIn className="mr-2" />
                                 Se connecter
                             </Link>
                         </Button>
                         <Button asChild variant="outline" className="text-lg py-6 hover:bg-gray-100 transition-all duration-300">
-                            <Link href="/register" className="flex items-center justify-center">
+                            <Link href="/security/register" className="flex items-center justify-center">
                                 <UserPlus className="mr-2" />
                                 S'inscrire
                             </Link>

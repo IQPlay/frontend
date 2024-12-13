@@ -1,92 +1,91 @@
-import Link from 'next/link';
+import React from 'react';
 
 export default function EditProfilePage() {
     const mockUserData = {
         name: "John Doe",
         email: "john@example.com",
-        joinDate: "2024-01-01",
-        totalGames: 50,
-        averageScore: 150,
     };
 
-
     return (
-        <>
-            <h1 className="text-2xl font-bold mb-4">Modifier le Profil</h1>
-            <form
-                className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-            >
-                <div className="mb-4">
-                    <label
-                        className="block text-gray-700 text-sm font-bold mb-2"
-                        htmlFor="name"
-                    >
-                        Nom
-                    </label>
-                    <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="name"
-                        type="text"
-                        placeholder="Nom"
-                        name="name"
-                        value={mockUserData.name}
-                    />
+        <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg">
+                {/* Header Section */}
+                <div className="bg-indigo-600 rounded-t-lg px-4 py-5 sm:px-6">
+                    <h1 className="text-2xl font-bold text-white">Modifier le Profil</h1>
+                    <p className="text-indigo-200 text-sm mt-1">Mettez à jour vos informations personnelles</p>
                 </div>
-                <div className="mb-4">
-                    <label
-                        className="block text-gray-700 text-sm font-bold mb-2"
-                        htmlFor="email"
-                    >
-                        Email
-                    </label>
-                    <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="email"
-                        type="email"
-                        placeholder="Email"
-                        name="email"
-                        value={mockUserData.email}
-                    />
-                </div>
-                <div className="mb-4">
-                    <label
-                        className="block text-gray-700 text-sm font-bold mb-2"
-                        htmlFor="password"
-                    >
-                        Nouveau mot de passe
-                    </label>
-                    <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                        id="password"
-                        type="password"
-                        placeholder="******************"
-                        name="password"
-                    />
-                </div>
-                <div className="mb-6">
-                    <label
-                        className="block text-gray-700 text-sm font-bold mb-2"
-                        htmlFor="confirmPassword"
-                    >
-                        Confirmer le nouveau mot de passe
-                    </label>
-                    <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                        id="confirmPassword"
-                        type="password"
-                        placeholder="******************"
-                        name="confirmPassword"
-                    />
-                </div>
-                <div className="flex items-center justify-between">
-                    <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        type="submit"
-                    >
-                        Enregistrer les modifications
-                    </button>
-                </div>
-            </form>
-        </>
+
+                {/* Form Section */}
+                <form className="px-4 py-5 sm:p-6">
+                    <div className="grid grid-cols-1 gap-6">
+                        {/* Name Field */}
+                        <div>
+                            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                Nom
+                            </label>
+                            <input
+                                type="text"
+                                name="name"
+                                id="name"
+                                defaultValue={mockUserData.name}
+                                className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                            />
+                        </div>
+
+                        {/* Email Field */}
+                        <div>
+                            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                                Adresse e-mail
+                            </label>
+                            <input
+                                type="email"
+                                name="email"
+                                id="email"
+                                defaultValue={mockUserData.email}
+                                className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                            />
+                        </div>
+
+                        {/* Password Field */}
+                        <div>
+                            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                                Nouveau mot de passe
+                            </label>
+                            <input
+                                type="password"
+                                name="password"
+                                id="password"
+                                placeholder="********"
+                                className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                            />
+                        </div>
+
+                        {/* Confirm Password Field */}
+                        <div>
+                            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                                Confirmez le mot de passe
+                            </label>
+                            <input
+                                type="password"
+                                name="confirmPassword"
+                                id="confirmPassword"
+                                placeholder="********"
+                                className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="mt-6 flex justify-end">
+                        <button
+                            type="submit"
+                            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                            Enregistrer les modifications
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     );
 }

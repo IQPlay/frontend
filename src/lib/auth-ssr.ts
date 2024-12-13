@@ -24,7 +24,7 @@ export async function checkAuth() {
     const data = (await res.json()) as { authenticated: boolean; user: string };
 
     if (!data.authenticated) {
-        redirect("/login");
+        redirect("/security/login");
     }
 
     return data;

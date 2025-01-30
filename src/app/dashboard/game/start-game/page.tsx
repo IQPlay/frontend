@@ -13,7 +13,7 @@ export default function Page() {
         try {
             // Appel à l'API pour démarrer la partie
             const response = await apiRequest(`/game/start`, "POST", { difficulty });
-            router.push(`/game/play-game?sessionId=${response.sessionId}`);
+            router.push(`/dashboard/game/play-game?sessionId=${response.sessionId}`);
         } catch (err: any) {
             console.error("Erreur détectée :", err);
             setError(err.message || "Impossible de démarrer la partie.");

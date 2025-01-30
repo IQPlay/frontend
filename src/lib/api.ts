@@ -4,33 +4,37 @@ export const API_URL = "https://localhost:8443/api";
 /**
  * Fonction générique pour envoyer des requêtes à l'API.
  */
-export async function apiRequest(endpoint: string, method: string, body?: any) {
+export async function apiRequest(endpoint: string, method: string, body?: any, token?: string) {
     console.log(`Requête envoyée à : ${API_URL}${endpoint}`);
     console.log(`Méthode : ${method}`);
     console.log(`Body :`, body);
 
+    const headers: HeadersInit = {
+        "Content-Type": "application/json",
+    };
+
+    if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+    }
+
     const response = await fetch(`${API_URL}${endpoint}`, {
         method,
-        headers: {
-            "Content-Type": "application/json",
-        },
+        headers,
         body: body ? JSON.stringify(body) : undefined,
-        credentials: 'include', // Inclure les credentials (cookies)
+        credentials: "include",
     });
 
     console.log(`Statut de la réponse : ${response.status}`);
 
-    // Vérifie si la réponse est au format JSON
-    const contentType = response.headers.get("Content-Type");
     if (!response.ok) {
+        const contentType = response.headers.get("Content-Type");
         const errorMessage = contentType && contentType.includes("application/json")
             ? (await response.json()).error || "Erreur inattendue."
             : await response.text();
         throw new Error(errorMessage);
     }
 
-    // Retourne la réponse JSON si elle est valide
-    return contentType && contentType.includes("application/json")
-        ? await response.json()
-        : null;
+    return response.json();
 }
+
+

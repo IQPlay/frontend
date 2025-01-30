@@ -1,48 +1,111 @@
-import React from 'react';
+import { cookies } from "next/headers";
+import { apiRequest } from "@/lib/api";
+import Link from "next/link";
+import { Play, Clock, CheckCircle } from "lucide-react";
 
-const mockHistory = [
-    { id: 1, date: '2024-01-10', score: 100 },
-    { id: 2, date: '2024-01-09', score: 150 },
-    { id: 3, date: '2024-01-08', score: 200 },
-    { id: 4, date: '2024-01-07', score: 120 },
-    { id: 5, date: '2024-01-06', score: 180 },
-];
+type GameHistory = {
+    id: number;
+    name: string;
+    level: number;
+    score: number;
+    state: string;
+    createdAt: string; // Format YYYY/MM/DD
+};
 
-const averageScore = mockHistory.reduce((sum, game) => sum + game.score, 0) / mockHistory.length;
+export default async function HistoryPage() {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
 
-export default function HistoryPage() {
-    return (
-        <div className="container mx-auto py-8 px-4">
-            <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-                <div className="bg-indigo-600 px-6 py-4 text-center">
-                    <h1 className="text-2xl font-bold text-white">Historique des Parties</h1>
-                    <p className="text-indigo-200 text-sm mt-1">Performances récentes</p>
-                </div>
-
-                <div className="p-6 space-y-8">
-                    {/* Score moyen */}
-                    <div className="text-center">
-                        <h3 className="text-lg font-semibold text-gray-700">Score Moyen</h3>
-                        <p className="text-2xl font-bold text-indigo-600">{averageScore.toFixed(2)}</p>
-                    </div>
-
-                    {/* Dernières parties */}
-                    <div>
-                        <h3 className="text-xl font-semibold mb-4 text-gray-700">Dernières Parties</h3>
-                        <ul className="space-y-4">
-                            {mockHistory.map((game) => (
-                                <li
-                                    key={game.id}
-                                    className="flex items-center justify-between bg-gray-50 px-4 py-2 rounded-lg shadow"
-                                >
-                                    <span className="text-sm text-gray-600">{game.date}</span>
-                                    <span className="text-lg font-bold text-indigo-600">{game.score}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
+    if (!token) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <p className="text-xl text-gray-600">Vous devez être connecté pour voir cette page.</p>
             </div>
+        );
+    }
+
+    let history: GameHistory[] = [];
+    let errorMessage: string | null = null;
+
+    try {
+        history = await apiRequest("/history/games", "GET", null, token);
+
+        // Tri des parties par ID (ordre décroissant → les parties récentes en haut)
+        history.sort((a, b) => b.id - a.id);
+
+    } catch (error) {
+        console.error("Erreur lors de la récupération de l'historique :", error);
+        errorMessage = "Impossible de récupérer l'historique des parties.";
+    }
+
+    return (
+        <div className="max-w-5xl mx-auto py-12 px-6">
+            {/* En-tête */}
+            <div className="text-center mb-8">
+                <h1 className="text-4xl font-bold text-gray-900">Historique des Parties</h1>
+                <p className="text-gray-500 mt-2">Gérez et continuez vos parties en cours.</p>
+            </div>
+
+            {errorMessage ? (
+                <p className="text-center text-red-500">{errorMessage}</p>
+            ) : history.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {history.map((game) => (
+                        <div
+                            key={game.id}
+                            className={`relative bg-white shadow-lg rounded-lg p-6 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] ${
+                                game.state === "IN_PROGRESS" || game.state === "PAUSED"
+                                    ? "border-l-4 border-blue-500"
+                                    : game.state === "ENDED"
+                                        ? "border-l-4 border-gray-400"
+                                        : "border-l-4 border-red-500"
+                            }`}
+                        >
+                            {/* Date et Score */}
+                            <div className="flex justify-between items-center text-gray-600 text-sm">
+                                <span className="font-medium">{game.createdAt}</span>
+                                <span className="font-semibold text-indigo-600 text-lg">{game.score} pts</span>
+                            </div>
+
+                            {/* Titre */}
+                            <h2 className="text-xl font-semibold text-gray-900 mt-2 flex items-center gap-2">
+                                {game.state === "IN_PROGRESS" && <Clock className="text-blue-500" size={18} />}
+                                {game.state === "PAUSED" && <Play className="text-yellow-500" size={18} />}
+                                {game.state === "ENDED" && <CheckCircle className="text-gray-500" size={18} />}
+                                {game.name}
+                            </h2>
+
+                            {/* Niveau */}
+                            <p className="text-sm text-gray-500">Niveau : <span className="font-medium">{game.level}</span></p>
+
+                            {/* Statut de la partie */}
+                            <p className={`mt-2 text-sm font-semibold uppercase ${
+                                game.state === "IN_PROGRESS" ? "text-blue-600"
+                                    : game.state === "PAUSED" ? "text-yellow-500"
+                                        : game.state === "ENDED" ? "text-gray-500"
+                                            : "text-red-600"
+                            }`}>
+                                {game.state === "IN_PROGRESS" ? "En cours"
+                                    : game.state === "PAUSED" ? "En pause"
+                                        : game.state === "ENDED" ? "Terminée"
+                                            : "Inconnue"}
+                            </p>
+
+                            {/* Bouton "Continuer" si la partie est en cours ou en pause */}
+                            {(game.state === "IN_PROGRESS" || game.state === "PAUSED") && (
+                                <Link
+                                    href={`/dashboard/game/play-game?sessionId=${game.id}`}
+                                    className="mt-4 block bg-blue-600 text-white text-center py-2 rounded-lg hover:bg-blue-700 transition"
+                                >
+                                    Continuer la partie
+                                </Link>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <p className="text-center text-gray-500">Aucune partie jouée pour l'instant.</p>
+            )}
         </div>
     );
 }

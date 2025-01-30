@@ -1,12 +1,22 @@
-import { apiRequest } from "@/lib/api";
-import { redirect } from "next/navigation";
+"use client";
 
-export default async function Logout() {
-    try {
-        await apiRequest("/auth/logout", "POST");
-        redirect("/security/login");
-    } catch (error) {
-        console.error("Erreur lors de la déconnexion :", error);
-        redirect("/security/login");  // En cas d'erreur, redirige quand même vers la page de login
-    }
+import { useEffect } from "react";
+import { apiRequest } from "@/lib/api";
+
+export default function Logout() {
+    useEffect(() => {
+        const performLogout = async () => {
+            try {
+                await apiRequest("/auth/logout", "POST");
+            } catch (error) {
+                console.error("Erreur lors de la déconnexion :", error);
+            } finally {
+                window.location.href = "/security/login";
+            }
+        };
+
+        performLogout();
+    }, []);
+
+    return <p className="text-center text-gray-600">Déconnexion en cours...</p>;
 }

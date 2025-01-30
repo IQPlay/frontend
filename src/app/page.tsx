@@ -1,54 +1,46 @@
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
+import Link from 'next/link';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Brain, LogIn, UserPlus } from 'lucide-react';
 
 export default function Home() {
-  return (
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-center mb-8">Jeu de Calcul Mental</h1>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Jouer sans compte</CardTitle>
-              <CardDescription>Commencez à jouer immédiatement sans vous inscrire</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Parfait pour essayer le jeu rapidement !</p>
-            </CardContent>
-            <CardFooter>
-              <Button asChild>
-                <Link href="/play">Jouer maintenant</Link>
-              </Button>
-            </CardFooter>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Créer un compte ou se connecter</CardTitle>
-              <CardDescription>Sauvegardez vos scores et suivez vos progrès</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Créez un compte pour accéder à toutes les fonctionnalités !</p>
-            </CardContent>
-            <CardFooter className="flex justify-between">
-              <Button asChild variant="outline">
-                <Link href="/register">S'inscrire</Link>
-              </Button>
-              <Button asChild>
-                <Link href="/login">Se connecter</Link>
-              </Button>
-            </CardFooter>
-          </Card>
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-100 flex flex-col items-center justify-center p-4">
+            <Card className="w-full max-w-lg">
+                <CardHeader className="text-center">
+                    <CardTitle className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 mb-2">
+                        Jeu de Calcul Mental
+                    </CardTitle>
+                    <CardDescription className="text-xl text-gray-600">
+                        Entraînez votre cerveau avec des défis mathématiques amusants !
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <p className="text-center text-gray-500 text-sm">
+                        <strong>Astuce :</strong> Connectez-vous ou inscrivez-vous pour sauvegarder votre progression dans les niveaux.
+                    </p>
+                    <Button asChild className="w-full text-lg py-6 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+                        <Link href="/game/start-game" className="flex items-center justify-center">
+                            <Brain className="mr-2" />
+                            Jouer sans compte
+                        </Link>
+                    </Button>
+                    <div className="grid grid-cols-2 gap-4">
+                        <Button asChild variant="outline" className="text-lg py-6 hover:bg-gray-100 transition-all duration-300">
+                            <Link href="/security/login" className="flex items-center justify-center">
+                                <LogIn className="mr-2" />
+                                Se connecter
+                            </Link>
+                        </Button>
+                        <Button asChild variant="outline" className="text-lg py-6 hover:bg-gray-100 transition-all duration-300">
+                            <Link href="/security/register" className="flex items-center justify-center">
+                                <UserPlus className="mr-2" />
+                                S'inscrire
+                            </Link>
+                        </Button>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
-
-        <div className="mt-12 text-center">
-          <h2 className="text-2xl font-semibold mb-4">Comment jouer ?</h2>
-          <p className="max-w-2xl mx-auto">
-            Résolvez des problèmes de calcul mental le plus rapidement possible.
-            Choisissez votre niveau de difficulté et voyez combien de calculs vous pouvez résoudre en 60 secondes !
-          </p>
-        </div>
-      </div>
-  )
+    );
 }

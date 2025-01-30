@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "dev:https": "node server.js"
+    "dev:tls": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 npm run dev"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
@@ -34,6 +34,7 @@
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.2",
     "autoprefixer": "^10.4.20",
+    "cross-env": "^7.0.3",
     "eslint": "9.16.0",
     "eslint-config-next": "15.0.4",
     "postcss": "^8.4.49",
